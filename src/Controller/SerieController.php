@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\SerieRepository;
 use http\Env\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,23 +16,27 @@ class SerieController extends AbstractController
     /**
      * @Route("", name="list")
      */
-    public function list(): Response
+    public function list(SerieRepository $serieRepository): Response
     {
-        //todo: aller chercher les séries en bdd
+
+        $series = $serieRepository->findBestSeries();
+
 
         return $this->render('serie/list.html.twig', [
-
+            "series" => $series
         ]);
     }
 
     /**
      * @Route("/details/{id}", name="details")
      */
-    public function details(int $id): Response
+    public function details(int $id, SerieRepository $serieRepository): Response
     {
-        //todo: aller chercher les séries en bdd
+        $serie = $serieRepository->find($id);
 
-        return $this->render('serie/details.html.twig');
+        return $this->render('serie/details.html.twig', [
+            "serie" => $serie
+        ]);
     }
 
     /**
